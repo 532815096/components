@@ -1,5 +1,6 @@
 <template>
     <div :class="'inner-content ' + (isDrag ? 'inner-content-draging' : '')"
+         @click="clickConetnt"
          :id="id">
         <slot></slot>
         <div class="mask"
@@ -64,6 +65,10 @@ export default {
         content.addEventListener('mousedown', this.handleMouseDown);
     },
     methods: {
+        clickConetnt(ev) {
+            ev.stopPropagation();
+            this.selectData = [];
+        },
         eventHasNoSelectClass(target) {
             let returnFlag = false;
             this.noTriggerClass.forEach(item => {
@@ -77,15 +82,15 @@ export default {
             let target = event.target;
             if (target.tagName === 'SPAN' || this.eventHasNoSelectClass(target)) return false;
             this.selectData = [];
+            this.isDrag = true;
             this.start_x = event.clientX;
             this.start_y = event.clientY;
-            this.is_show_mask = true;
-            this.isDrag = true;
 
             this.content.addEventListener('mousemove', this.handleMouseMove);
             this.content.addEventListener('mouseup', this.handleMouseUp);
         },
         handleMouseMove(event) {
+            this.is_show_mask = true;
             this.end_x = event.clientX;
             this.end_y = event.clientY;
         },
@@ -110,6 +115,7 @@ export default {
             })
         },
         collide(rect1, rect2) {
+            if(!rect1 || !rect2) return false;
             const maxX = Math.max(rect1.x + rect1.width, rect2.x + rect2.width);
             const maxY = Math.max(
                 rect1.y + rect1.height,

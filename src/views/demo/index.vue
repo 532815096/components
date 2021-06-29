@@ -368,7 +368,7 @@ export default {
             this.selectDom([item], index);
         },
         ctrV() {
-            if(!this.localLast.parentIndex || !this.localLast.childrenIndex) return false;
+            if(this.localLast.parentIndex == null || this.localLast.childrenIndex == null) return false;
             let blocks = this.blocks[this.localLast.parentIndex].blocks;
             // last
             if(this.localLast.childrenIndex == blocks.length - 1){
