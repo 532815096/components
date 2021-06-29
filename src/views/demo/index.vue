@@ -298,25 +298,31 @@ export default {
     },
 
     mounted() {
-        document.addEventListener('keypress', (e) => {
-            //复制
-            if (e.ctrlKey && e.keyCode == 3) {
-                this.copyData = this.restArray(this.checkedData);
-                this.copyData.forEach(item => {
-                    //防止id重复导致vue报错
-                    item.id += 1000;
-                    item.name = item.name + 'copy';
-                    item.select = false;
-                })
-            }
+        // document.addEventListener('keypress', (e) => {
+        //     //复制
+        //     if (e.ctrlKey && e.keyCode == 3) {
+        //         this.copyData = this.restArray(this.checkedData);
+        //         this.copyData.forEach(item => {
+        //             //防止id重复导致vue报错
+        //             item.id += 1000;
+        //             item.name = item.name + 'copy';
+        //             item.select = false;
+        //         })
+        //     }
+        //
+        //     //粘贴
+        //     if (e.ctrlKey && e.keyCode == 22) {
+        //         this.ctrV();
+        //     }
+        // })
 
-            //粘贴
-            if (e.ctrlKey && e.keyCode == 22) {
-                this.ctrV();
-            }
-        })
+        document.body.addEventListener('copy', this.ctrC);
+        document.body.addEventListener('paste', this.ctrV);
     },
-
+    destroyed() {
+        document.body.removeEventListener('copy', this.ctrC);
+        document.body.removeEventListener('paste', this.ctrV);
+    },
     methods: {
         dragComponent() {
             this.drag = false;
@@ -366,6 +372,15 @@ export default {
             };
 
             this.selectDom([item], index);
+        },
+        ctrC() {
+            this.copyData = this.restArray(this.checkedData);
+            this.copyData.forEach(item => {
+                //防止id重复导致vue报错
+                item.id += 1000;
+                item.name = item.name + 'copy';
+                item.select = false;
+            })
         },
         ctrV() {
             if(this.localLast.parentIndex == null || this.localLast.childrenIndex == null) return false;
