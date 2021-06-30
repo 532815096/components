@@ -8,12 +8,17 @@
         <div v-if="tab === 'list'">
             <div class="lists">
 
-                <draggable :list="items" :options="{group:'listGroup', animation:150}"
+                <draggable :list="items"
+                           :options="{
+                                group: 'listGroup',
+                                animation: 150,
+                                filter: '.list-value'
+                            }"
                            @start="drag=true" @end="dragComponent">
-                    <transition-group :name="!drag? 'list-complete' : null" :css="true">
+                    <transition-group>
                         <div class="list" v-for="item in items" :key="'num_' + item">
                             <span class="list-drag  kd-icon-checkbox-disabled"></span>
-                            <span class="list-value connot-draggable">I am NO.{{ item }}</span>
+                            <span class="list-value">I am NO.{{ item }}</span>
                         </div>
                     </transition-group>
                 </draggable>
@@ -25,34 +30,6 @@
             <div class="table-container">
                 <div class="each-table-content"
                      v-for="(item, index) in blocks">
-
-<!--                    <select-block :select-content="'select_content_' + item.id">-->
-                    <!--                        <div class="each-table-title">-->
-                    <!--                            {{ item.name }}-->
-                    <!--                            </div>-->
-                    <!--                            <div class="each-table-blocks"-->
-                    <!--                                 :id="'select_content_' + item.id">-->
-                    <!--                                <div class="table-blocks-content">-->
-                    <!--                                    <draggable :list="item.blocks"-->
-                    <!--                                               :key="item.name"-->
-                    <!--                                               :options="{group:item.name, animation:150}"-->
-                    <!--                                               @start="drag=true"-->
-                    <!--                                               @end="dragComponent">-->
-                    <!--                                        <transition-group :name="!drag? 'list-complete' : null" :css="true">-->
-
-                    <!--                                            <div class="each-table-block"-->
-                    <!--                                                 v-for="inner in item.blocks"-->
-                    <!--                                                 :key="'block_' + inner.id"-->
-                    <!--                                            >{{ inner.name }}</div>-->
-
-                    <!--                                        </transition-group>-->
-                    <!--                                    </draggable>-->
-
-                    <!--                                </div>-->
-                    <!--                            </div>-->
-                    <!--                    </select-block>-->
-
-
 
                             <div class="each-table-title">{{ item.name }}</div>
                             <div class="each-table-blocks">
@@ -66,7 +43,7 @@
                                                     :options="{group:item.name, animation:150}"
                                                     @start="drag=true"
                                                     @end="dragComponent">
-                                            <transition-group :name="!drag? 'list-complete' : null" :css="true">
+                                            <transition-group>
 
                                                 <div v-for="(inner, _index) in item.blocks"
                                                      @click="clickBlock(inner, index, _index)"
@@ -298,24 +275,6 @@ export default {
     },
 
     mounted() {
-        // document.addEventListener('keypress', (e) => {
-        //     //复制
-        //     if (e.ctrlKey && e.keyCode == 3) {
-        //         this.copyData = this.restArray(this.checkedData);
-        //         this.copyData.forEach(item => {
-        //             //防止id重复导致vue报错
-        //             item.id += 1000;
-        //             item.name = item.name + 'copy';
-        //             item.select = false;
-        //         })
-        //     }
-        //
-        //     //粘贴
-        //     if (e.ctrlKey && e.keyCode == 22) {
-        //         this.ctrV();
-        //     }
-        // })
-
         document.body.addEventListener('copy', this.ctrC);
         document.body.addEventListener('paste', this.ctrV);
     },
